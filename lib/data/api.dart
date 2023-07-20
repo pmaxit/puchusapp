@@ -30,11 +30,3 @@ FutureProvider<List<Song>> songsProvider =
   final apiClient = SongApiClient();
   return apiClient.getSongs();
 });
-
-// Provider for songs and status
-FutureProvider<List<Tuple<Song, bool>>> songStatusProvider =
-    FutureProvider<List<Tuple<Song, bool>>>((ref) async {
-  final apiClient = SongApiClient();
-  final songs = await apiClient.getSongs();
-  return Future.value(songs.map((e) => Tuple(e, false)).toList());
-});

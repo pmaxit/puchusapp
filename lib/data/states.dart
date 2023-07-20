@@ -2,47 +2,97 @@
 // Path: lib/data/states.dart
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'api.dart';
+import 'song.dart';
 
-class SongState {
+class AppState {
+  final List<Song> songs;
   final bool isPlaying;
-  final int songId;
-  // store valuenotifier for that song
-  final ValueNotifier<bool> status;
+  final Song? currentSong;
+  final Song? previousSong;
 
-  SongState(
-      {required this.isPlaying, required this.songId, required this.status});
+  AppState({
+    required this.songs,
+    this.currentSong,
+    required this.isPlaying,
+    this.previousSong,
+  });
 
-  factory SongState.initial() => SongState(
+  factory AppState.initial() => AppState(
+        songs: [],
+        currentSong: null,
         isPlaying: false,
-        songId: 0,
-        status: ValueNotifier<bool>(false),
       );
 }
 
-// notifier is the API call to change the state
+class AppStateNotifier extends StateNotifier<AppState> {
+  AppStateNotifier() : super(AppState.initial());
 
-class SongStateNotifier extends StateNotifier<SongState> {
-  SongStateNotifier() : super(SongState.initial());
-
-  void playSong(int songId, ValueNotifier<bool> status) {
-    state = SongState(isPlaying: true, songId: songId, status: status);
-    changeStatus(status.value);
+  void addSongs(List<Song> songs) {
+    state = AppState(
+      songs: songs,
+      isPlaying: false,
+      currentSong: songs[0],
+    );
   }
 
-  void pauseSong(int songId, ValueNotifier<bool> status) {
-    state = SongState(isPlaying: false, songId: songId, status: status);
-    changeStatus(status.value);
+  void playSong(Song currentSong) {
+    state = AppState(
+      songs: state.songs,
+      isPlaying: true,
+      currentSong: currentSong,
+    );
   }
 
-  void changeStatus(bool status) {
-    if (mounted) {
-      state.status.value = status;
+  void pauseSong(Song currentSong) {
+    state = AppState(
+      songs: state.songs,
+      isPlaying: false,
+      currentSong: currentSong,
+    );
+  }
+
+  void toggleSong(Song? currentSong) {
+    bool isPlayingUpdate = state.isPlaying;
+    if (currentSong == state.currentSong || state.isPlaying == false) {
+      isPlayingUpdate = !isPlayingUpdate;
     }
+    state = AppState(
+      songs: state.songs,
+      isPlaying: isPlayingUpdate,
+      currentSong: currentSong,
+    );
   }
+
+  void copyWith({
+    List<Song>? songs,
+    bool? isPlaying,
+    Song? currentSong,
+  }) {
+    print('updating app state ${currentSong!.songId}');
+    state = AppState(
+        songs: songs ?? state.songs,
+        isPlaying: isPlaying ?? state.isPlaying,
+        currentSong: currentSong ?? state.currentSong,
+        previousSong: state.currentSong);
+  }
+
+  Song? get currentSong => state.currentSong;
+  bool get isPlaying => state.isPlaying;
+  List<Song> get songs => state.songs;
+  Song? get previousSong => state.previousSong;
 }
 
-final appStateProvider = StateNotifierProvider<SongStateNotifier, SongState>(
-  (ref) => SongStateNotifier(),
-);
+// appStateProvider
+final appStateProvider =
+    StateNotifierProvider<AppStateNotifier, AppState>((ref) {
+  // get songs from songs API
+  AppStateNotifier appStateNotifier = AppStateNotifier();
+
+  final songs = ref.watch(songsProvider);
+  songs.whenData((value) => appStateNotifier.addSongs(value));
+
+  return appStateNotifier;
+});

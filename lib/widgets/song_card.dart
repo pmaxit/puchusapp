@@ -7,36 +7,30 @@ import '../data/states.dart';
 
 class SongCard extends HookConsumerWidget {
   const SongCard({
-    super.key,
+    Key? key,
     required this.song,
     required this.status,
-  });
+  }) : super(key: key);
 
   final Song song;
   final bool status;
 
-  void updateState(WidgetRef ref, ValueNotifier<bool> status) {
-    // get the appstate
-    final appState = ref.read(appStateProvider);
-    // pause previous song
-    //ref.read(appStateProvider.notifier).pauseSong(appState.songId, status);
-    if (appState.songId != song.songId) {
-      ref.read(appStateProvider.notifier).changeStatus(false);
-    }
-    // play current song
-    if (status.value) {
-      ref.read(appStateProvider.notifier).pauseSong(song.songId!, status);
-    } else {
-      ref.read(appStateProvider.notifier).playSong(song.songId!, status);
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // use valueNotifier
+    print('${song.songId} :::: ${status}');
     final vStatus = useValueNotifier(status);
-    // get the appstate
-    final appState = ref.read(appStateProvider);
+
+    // subscribe to the changes
+    final appState = ref.read(appStateProvider.notifier);
+
+    final updateAppState = useCallback(() {
+      // turning off the other songs
+      // turn off the previous song
+      print('updating app state');
+      appState.copyWith(isPlaying: vStatus.value, currentSong: song);
+    }, []);
+
     useAutomaticKeepAlive();
 
     return Card(
@@ -45,35 +39,34 @@ class SongCard extends HookConsumerWidget {
       ),
       child: InkWell(
         onTap: () {
-          // make the earlier state false
-
           vStatus.value = !vStatus.value;
-          updateState(ref, vStatus);
+          print('on Tap');
+          //updateAppState();
+          appState.copyWith(isPlaying: vStatus.value, currentSong: song);
         },
         child: ListTile(
-          leading: Image.network(song.albumArt!),
-          title: Text(song.title!),
-          subtitle: Text(song.artist!),
-          trailing: ValueListenableBuilder(
-            valueListenable: vStatus,
-            key: ValueKey(song.title),
-            builder: (context, bool status, child) => Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (status)
-                  const Icon(Icons.pause, color: Colors.black, size: 30)
-                else
-                  const Icon(
-                    Icons.play_arrow,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-              ],
+            leading: Image.network(song.albumArt!),
+            title: Text(song.title!),
+            subtitle: Text(song.artist!),
+            trailing: ValueListenableBuilder(
+              valueListenable: vStatus,
+              key: ValueKey(song.title),
+              builder: (context, bool status, child) => Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (status)
+                    const Icon(Icons.pause, color: Colors.black, size: 30)
+                  else
+                    const Icon(
+                      Icons.play_arrow,
+                      color: Colors.black,
+                      size: 30,
+                    ),
+                ],
+              ),
             ),
-          ),
-          isThreeLine: false,
-          selected: appState.songId == song.songId,
-        ),
+            isThreeLine: false,
+            selected: vStatus.value),
       ),
     );
   }
