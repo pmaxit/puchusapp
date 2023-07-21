@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,10 +18,19 @@ String formatDuration(Duration duration) {
 class AudioWidget extends HookConsumerWidget {
   @override
   final Key? key;
+  StreamSubscription<Duration>? subscription;
 
-  const AudioWidget({
+  AudioWidget({
     this.key,
   }) : super(key: key);
+
+  void pauseSubscription() {
+    subscription?.pause();
+  }
+
+  void resumeSubscription() {
+    subscription?.resume();
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,11 +43,12 @@ class AudioWidget extends HookConsumerWidget {
 
     final audioPlayer = useMemoized(() {
       final player = AudioPlayer();
+
       player.setLoopMode(LoopMode.one);
       player.setUrl(
-          "http://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3");
+          "https://storage.googleapis.com/sogslullabies/Mouj%20Lajyoo%20Adde%20Kaleo%20-%20Kashmiri%20Lori%20(1).mp3");
       return player;
-    }, const []);
+    }, [song]);
 
     // create audio player
     useEffect(() {
@@ -48,11 +60,11 @@ class AudioWidget extends HookConsumerWidget {
         audioPlayer.pause();
       }
       return () => audioPlayer.dispose();
-    }, [audioPlayer]);
+    }, [audioPlayer, song]);
 
     // listen to audio Player changes
     useEffect(() {
-      final subscription = audioPlayer.positionStream.listen((position) {
+      subscription = audioPlayer.positionStream.listen((position) {
         sliderValue.value = position.inSeconds.toDouble();
       });
 
@@ -71,11 +83,11 @@ class AudioWidget extends HookConsumerWidget {
       });
 
       return () {
-        subscription.cancel();
+        subscription?.cancel();
         durationSubscription.cancel();
         playerStateSubscription.cancel();
       };
-    }, const []);
+    }, [audioPlayer, song]);
 
     // play pause audio
     useEffect(() {
@@ -106,12 +118,18 @@ class AudioWidget extends HookConsumerWidget {
                     max: durationValue.value,
                     value: sliderValue.value,
                     onChanged: (value) {
+                      pauseSubscription();
+                      // cancel stream
                       final newValue = double.parse(value.toStringAsFixed(4));
                       sliderValue.value = newValue;
                     },
                     activeColor: Colors.white,
                     inactiveColor: Colors.grey,
                     onChangeEnd: (value) {
+                      // if (subscription != null) {
+                      //   subscription!.resume();
+                      // }
+                      resumeSubscription();
                       audioPlayer.seek(Duration(seconds: value.toInt()));
                     },
                   ),

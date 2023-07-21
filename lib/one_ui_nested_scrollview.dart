@@ -50,11 +50,13 @@ class OneUiNestedScrollView extends HookWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: 5),
-                      child: Text("Puchu's App",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
+                      child: Center(
+                        child: Text("Puchu's App",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold)),
+                      ),
                     ),
                     Divider(),
                   ],
