@@ -24,13 +24,6 @@ class SongCard extends HookConsumerWidget {
     // subscribe to the changes
     final appState = ref.read(appStateProvider.notifier);
 
-    final updateAppState = useCallback(() {
-      // turning off the other songs
-      // turn off the previous song
-      print('updating app state');
-      appState.copyWith(isPlaying: vStatus.value, currentSong: song);
-    }, []);
-
     useAutomaticKeepAlive();
 
     return Card(

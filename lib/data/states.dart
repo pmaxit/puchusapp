@@ -2,7 +2,6 @@
 // Path: lib/data/states.dart
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'api.dart';
 import 'song.dart';
@@ -71,7 +70,6 @@ class AppStateNotifier extends StateNotifier<AppState> {
     bool? isPlaying,
     Song? currentSong,
   }) {
-    print('updating app state ${currentSong!.songId}');
     state = AppState(
         songs: songs ?? state.songs,
         isPlaying: isPlaying ?? state.isPlaying,

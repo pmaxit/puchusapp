@@ -3,6 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:oneui/pages/home_page.dart';
 import 'package:oneui/pages/test_page.dart';
 
+import 'pages/test_page_second.dart';
+
 Future<void> main() async {
   runApp(
     const ProviderScope(
@@ -30,8 +32,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
         '/test': (context) => const TestPage(),
+        '/second': (context) => const TestPageSecond()
       },
-      initialRoute: '/test',
+      initialRoute: '/second',
     );
   }
 }
