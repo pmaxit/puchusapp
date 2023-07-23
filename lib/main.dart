@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:oneui/pages/home_page.dart';
 import 'package:oneui/pages/test_page.dart';
+import 'package:oneui/pages/test_page_three.dart';
 
 import 'pages/test_page_second.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'One UI App Bar',
       theme: ThemeData(
           applyElevationOverlayColor: true,
@@ -32,9 +34,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
         '/test': (context) => const TestPage(),
-        '/second': (context) => const TestPageSecond()
+        '/second': (context) => const TestPageSecond(),
+        '/third': (context) => TestPageThird(),
       },
-      initialRoute: '/second',
+      initialRoute: '/third',
     );
   }
 }
