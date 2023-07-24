@@ -2,44 +2,31 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class StreakWidget extends HookWidget {
-  final keyWidget = GlobalKey();
-  final int clampedPosition;
-  int initialY = -1;
+import '../../utils/scroll_mixin.dart';
 
-  // access the scroll position
-  StreakWidget({Key? key, this.clampedPosition = 95}) : super(key: key);
+class StreakWidget extends StatefulWidget {
+  final int clampedPosition;
+
+  const StreakWidget({Key? key, this.clampedPosition = 100}) : super(key: key);
+
+  @override
+  StreakWidget2State createState() => StreakWidget2State();
+}
+
+class StreakWidget2State extends State<StreakWidget>
+    with ScrollHideOnClampedPoint {
+  final widgetKey = GlobalKey();
+
+  @override
+  int get clampedPosition => widget.clampedPosition;
+
+  @override
+  GlobalKey get keyWidget => widgetKey;
 
   @override
   Widget build(BuildContext context) {
-    final opacity = useState<double>(0);
-    final scrollController = Scrollable.of(context).widget.controller;
-
-    useEffect(() {
-      scrollController?.addListener(() {
-        final RenderBox? renderBox =
-            keyWidget.currentContext?.findRenderObject() as RenderBox?;
-        final position = renderBox?.localToGlobal(Offset.zero);
-        print("dx: ${position?.dy}");
-
-        if (initialY == -1) {
-          print('setting initialY again ');
-          initialY = position?.dy.toInt() ?? 0;
-        }
-        int newPosition = position?.dy.toInt() ?? 0;
-
-        double newOpacity = clampDouble(
-            (newPosition - clampedPosition) / (initialY - clampedPosition),
-            0,
-            1);
-
-        opacity.value = newOpacity;
-        print('opacity : $newOpacity $newPosition $initialY');
-      });
-    }, [scrollController]);
-
     return Opacity(
-      opacity: opacity.value,
+      opacity: opacity,
       child: Container(
         key: keyWidget,
         margin: const EdgeInsets.all(12),

@@ -8,8 +8,8 @@ class CustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Color backgroundColor;
   final String _title;
 
-  final double maxHeight = 40;
-  final double minHeight = 30;
+  final double maxHeight = 200;
+  final double minHeight = 100;
 
   CustomHeaderDelegate(this.backgroundColor, this._title);
 

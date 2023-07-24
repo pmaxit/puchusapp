@@ -16,7 +16,7 @@ class MyHomePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // songs Provider
-    final songs = ref.watch(songsProvider);
+    final songsApiProvider = ref.watch(songApiClientProvider);
 
     return Scaffold(
         body: AnnotatedRegion<SystemUiOverlayStyle>(
@@ -41,23 +41,30 @@ class MyHomePage extends HookConsumerWidget {
               tabs: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [_buildSongList(songs, ref)],
+                  children: [
+                    _buildSongList(songsApiProvider.getTabs().elementAt(0), ref)
+                  ],
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [_buildSongList(songs, ref)],
+                  children: [
+                    _buildSongList(songsApiProvider.getTabs().elementAt(1), ref)
+                  ],
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [_buildSongList(songs, ref)],
+                  children: [
+                    _buildSongList(songsApiProvider.getTabs().elementAt(2), ref)
+                  ],
                 ),
               ],
             )),
         bottomNavigationBar: AudioWidget());
   }
 
-  Widget _buildSongList(AsyncValue<List<Song>> songs, WidgetRef ref) {
+  Widget _buildSongList(String tab, WidgetRef ref) {
     // current song
+    final songs = ref.watch(songsByTabProvider(tab));
 
     return Expanded(
       child: songs.when(
