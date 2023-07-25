@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         '/second': (context) => const TestPageSecond(),
         '/third': (context) => TestPageThird(),
       },
-      initialRoute: '/',
+      initialRoute: '/third',
     );
   }
 }
