@@ -13,8 +13,6 @@ mixin ScrollHideOnClampedPoint<T extends StatefulWidget> on State<T> {
   GlobalKey get keyWidget;
 
   void _scrollListener() {
-    print(" scroll ${scrollController?.position.pixels.toString()}");
-
     setState(() {
       getPosition();
     });
@@ -33,12 +31,11 @@ mixin ScrollHideOnClampedPoint<T extends StatefulWidget> on State<T> {
       RenderBox? renderBox =
           keyWidget.currentContext?.findRenderObject() as RenderBox?;
       var newposition = renderBox?.localToGlobal(Offset.zero);
-      print('Position: ' + newposition!.dy.toString());
 
       if (initialY == -1) {
-        initialY = newposition.dy.toInt();
+        initialY = newposition!.dy.toInt();
       }
-      if (newposition.dy.toInt() < clampedPosition) {
+      if (newposition!.dy.toInt() < clampedPosition) {
         position = newposition.dy.toInt();
         opacity = clampDouble(
             (position - clampedPosition) / (initialY - clampedPosition), 0, 1);

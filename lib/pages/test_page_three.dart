@@ -13,7 +13,7 @@ import '../widgets/message_widget.dart';
 import 'widgets/flexible_custom_bar.dart';
 
 class TestPageThird extends StatelessWidget {
-  double maxHeight = 300;
+  double maxHeight = 220;
   double minHeight = 80;
   double clampedHeight = 250;
   final ScrollController scrollController = ScrollController();
@@ -37,28 +37,23 @@ class TestPageThird extends StatelessWidget {
         collapsedHeight: 100,
         title: _buildTitle(),
         backgroundColor: Colors.deepOrange,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20))),
       ),
 
-      SliverFixedExtentList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return Container(
-                color: Theme.of(context).colorScheme.surface,
-                child: Card(
-                    child: ListTile(
-                  leading: Icon(Icons.ac_unit, color: Colors.deepOrange),
-                  title: Text("AC UNIT is ON !"),
-                )));
-          }, childCount: 10),
-          itemExtent: 150),
       // SliverPersistentHeader(
       //   pinned: true,
       //   delegate: CustomHeaderDelegate(Colors.deepOrange, "Current Streak"),
       // ),
-      _body()
+      _body(),
+
+      SliverFillRemaining(
+          // This is the body of the page
+          child: Container(
+        color: Colors.white,
+      ))
     ]));
   }
 
@@ -74,30 +69,31 @@ class TestPageThird extends StatelessWidget {
   }
 
   Widget _buildTitle() {
-    return Container(
+    return SizedBox(
         width: double.infinity,
         child: Row(children: [
           CircularPercentIndicator(
               radius: 20.0,
               lineWidth: 10.0,
-              percent: 1,
+              percent: 0.85,
               progressColor: Colors.green,
               center: Image.network(
                 "https://cdn-icons-png.flaticon.com/512/1828/1828884.png",
                 width: 10,
                 height: 10,
               )),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Current Streak",
+              const Text("7% rewired",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 15,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold)),
-              Text("100 days",
-                  style: TextStyle(color: Colors.white, fontSize: 10)),
+              Text("119 victory days",
+                  style:
+                      TextStyle(color: Colors.deepOrange[200], fontSize: 16)),
             ],
           )
         ]));
@@ -116,31 +112,146 @@ class TestPageThird extends StatelessWidget {
           child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
             // StreakWidget(clampedPosition: 100),
             // StreakWidget(clampedPosition: 100),
-            MessageWidget(title: "3 days, 11 hour streak"),
             FadeOutWidget(
-              child: Row(
-                children: [
-                  Container(
-                      height: 50,
-                      color: Colors.white.withOpacity(0.3),
-                      child: Text("hello world")),
-                  const SizedBox(width: 10),
-                  Container(
-                      height: 50,
-                      color: Colors.white.withOpacity(0.3),
-                      child: Text("hello world"))
-                ],
+                child: const Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Pmaxit, \nIt's Checkup Time",
+                  style: TextStyle(fontSize: 20, color: Colors.white)),
+            )),
+            //MessageWidget(title: "3 days, 11 hour streak"),
+
+            const SizedBox(height: 20),
+            FadeOutWidget(
+                child: Align(
+              alignment: Alignment.centerLeft,
+              child: Material(
+                color: Theme.of(context).colorScheme.surface,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(25),
+                  onTap: () {},
+                  child: Container(
+                      width: 120,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25)),
+                      child: const Center(
+                          child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Begin",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.deepOrange,
+                                fontWeight: FontWeight.bold)),
+                      ))),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            MessageWidget(
-                title:
-                    "You are on 100 days streak \n Congratulations. Keep it up"),
+            ))
           ]),
         ));
   }
 
   Widget _body() {
-    return SliverFillRemaining(child: Container());
+    return SliverPadding(
+      padding: const EdgeInsets.all(15.0),
+      sliver: SliverList(
+          delegate: SliverChildListDelegate([
+        const SizedBox(
+            height: 60,
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("For you",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)))),
+        Card(
+          elevation: 3,
+          borderOnForeground: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: InkWell(
+            onTap: () {},
+            borderRadius: BorderRadius.circular(30.0),
+            child: const ListTile(
+              leading: Icon(Icons.star_border_purple500_rounded, size: 40),
+              title: Text("Special Offer"),
+              trailing: Icon(Icons.arrow_forward_ios),
+              isThreeLine: false,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        const SizedBox(
+            height: 60,
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("After Checkup",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)))),
+        Card(
+          elevation: 3,
+          borderOnForeground: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: InkWell(
+            onTap: () {},
+            borderRadius: BorderRadius.circular(30.0),
+            child: const ListTile(
+              leading: Icon(Icons.trending_up_rounded, size: 40),
+              title: Text("Your life tree is growing"),
+              trailing: Icon(Icons.arrow_forward_ios),
+              isThreeLine: false,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        const SizedBox(
+            height: 60,
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Today",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)))),
+        Card(
+          elevation: 3,
+          borderOnForeground: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: InkWell(
+            onTap: () {},
+            borderRadius: BorderRadius.circular(30.0),
+            child: const ListTile(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30))),
+              leading: Icon(Icons.local_activity_rounded, size: 40),
+              title: Text("2 activities"),
+              trailing: Icon(Icons.arrow_forward_ios),
+              isThreeLine: false,
+            ),
+          ),
+        ),
+        Card(
+          elevation: 3,
+          borderOnForeground: true,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30))),
+          child: InkWell(
+            onTap: () {},
+            borderRadius: BorderRadius.circular(30.0),
+            child: const ListTile(
+              leading: Icon(Icons.microwave_rounded, size: 40),
+              title: Text("Motivation"),
+              trailing: Icon(Icons.arrow_forward_ios),
+              isThreeLine: false,
+            ),
+          ),
+        ),
+      ])),
+    );
   }
 }
