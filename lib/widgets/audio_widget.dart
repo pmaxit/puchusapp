@@ -45,8 +45,11 @@ class AudioWidget extends HookConsumerWidget {
       final player = AudioPlayer();
 
       player.setLoopMode(LoopMode.one);
-      player.setUrl(
-          "https://storage.googleapis.com/sogslullabies/Mouj%20Lajyoo%20Adde%20Kaleo%20-%20Kashmiri%20Lori%20(1).mp3");
+
+      if (song?.url != null) {
+        player.setUrl(song!.url);
+      }
+
       return player;
     }, [song]);
 

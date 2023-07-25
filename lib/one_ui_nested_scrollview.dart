@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class OneUiNestedScrollView extends HookWidget {
   final List<Widget> tabs;
@@ -41,7 +42,7 @@ class OneUiNestedScrollView extends HookWidget {
                     child: CircleAvatar(
                       radius: 20,
                       backgroundImage: NetworkImage(
-                          "https://avatars.githubusercontent.com/u/55942632?v=4"),
+                          "https://www.freepnglogos.com/uploads/boss-baby-png/boss-baby-poses-kaylor-deviantart-0.vDlm268Zp_H4JCKqdoohBs7pEOPtgsNCuJqGdaTKhKM"),
                     ),
                   ),
                 ],
@@ -73,19 +74,23 @@ class OneUiNestedScrollView extends HookWidget {
                       unselectedLabelColor: Colors.grey,
                       tabs: const [
                         Tab(
-                            icon: Icon(
-                              Icons.grid_on,
+                            icon: FaIcon(
+                              FontAwesomeIcons.child,
                               size: 30.0,
-                              semanticLabel: "Grid",
                             ),
-                            text: "Grid"),
+                            text: "Puchu"),
                         Tab(
-                            icon: Icon(Icons.favorite_border_outlined,
-                                size: 30.0),
-                            text: "Favourite"),
+                            icon: FaIcon(
+                              FontAwesomeIcons.personBiking,
+                              size: 30.0,
+                            ),
+                            text: "Papa"),
                         Tab(
-                            icon: Icon(Icons.bookmark_border, size: 30.0),
-                            text: "Bookmark"),
+                            icon: FaIcon(
+                              FontAwesomeIcons.personPregnant,
+                              size: 30.0,
+                            ),
+                            text: "Mumma"),
                       ],
                     ),
                   ),

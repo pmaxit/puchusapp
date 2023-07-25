@@ -1,6 +1,5 @@
-import 'package:riverpod/riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../commons.dart';
 import 'song.dart';
 
 List<String> tabs = [
@@ -17,7 +16,7 @@ List<Song> songs = [
       artist: 'Coldplay',
       album: 'Ghost Stories',
       albumArt:
-          'https://mir-s3-cdn-cf.behance.net/project_modules/hd/137e8958616745.5a02fa9233814.jpg',
+          'https://www.pngall.com/wp-content/uploads/2016/04/Happy-Person-Free-Download-PNG.png',
       url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'),
   Song(
       tab: 'Papa',
@@ -26,8 +25,9 @@ List<Song> songs = [
       artist: 'Papa',
       album: 'Ghost Stories',
       albumArt:
-          'https://mir-s3-cdn-cf.behance.net/project_modules/hd/137e8958616745.5a02fa9233814.jpg',
-      url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'),
+          'https://www.pngall.com/wp-content/uploads/2016/04/Happy-Person-Free-Download-PNG.png',
+      url:
+          "https://storage.googleapis.com/sogslullabies/Mouj%20Lajyoo%20Adde%20Kaleo%20-%20Kashmiri%20Lori%20(1).mp3"),
   Song(
       tab: 'Mummy',
       songId: 2,
@@ -35,21 +35,26 @@ List<Song> songs = [
       artist: 'Mummy',
       album: 'Ghost Stories',
       albumArt:
-          'https://mir-s3-cdn-cf.behance.net/project_modules/hd/137e8958616745.5a02fa9233814.jpg',
-      url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'),
+          'https://www.pngall.com/wp-content/uploads/2016/04/Happy-Person-Free-Download-PNG.png',
+      url:
+          "https://storage.googleapis.com/sogslullabies/Mouj%20Lajyoo%20Adde%20Kaleo%20-%20Kashmiri%20Lori%20(1).mp3"),
 ];
 
-List<Song> getSongsByTab(String tab) {
-  return songs.where((element) => element.tab == tab).toList();
-}
-
 class SongApiClient {
-  Future<List<Song>> getSongsByTab(String tab) async {
-    return Future.value(songs.where((element) => element.tab == tab).toList());
-  }
-
   Future<List<Song>> getSongs() async {
     return Future.value(songs);
+  }
+
+  Future<List<Song>> getSongsFromURL() async {
+    // make http call
+    // convert to songs
+
+    return Future.value(songs);
+  }
+
+  Future<List<Song>> getSongsByTab(String tab) async {
+    List<Song> songs = await getSongs();
+    return Future.value(songs.where((element) => element.tab == tab).toList());
   }
 
   // get all tabs
