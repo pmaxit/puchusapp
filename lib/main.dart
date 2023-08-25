@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:oneui/pages/home_page.dart';
-import 'package:oneui/pages/test_page.dart';
-import 'package:oneui/pages/test_page_three.dart';
 
-import 'pages/test_page_second.dart';
+import 'routes.dart';
 
 Future<void> main() async {
   runApp(
@@ -24,20 +21,47 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'One UI App Bar',
       theme: ThemeData(
+
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepOrange,
+              foregroundColor: Colors.white,
+              surfaceTintColor: Colors.deepOrange,
+              
+              
+              shape: RoundedRectangleBorder(
+
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          ),
           applyElevationOverlayColor: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
+          inputDecorationTheme: const InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(color: Colors.deepOrange),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+            
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(color: Colors.deepOrange),
+            ),
+            labelStyle: TextStyle(color: Colors.grey),
+            hintStyle: TextStyle(color: Colors.black),
+            
+          ),
           sliderTheme: const SliderThemeData(
             trackHeight: 2,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
           )),
-      routes: {
-        '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
-        '/test': (context) => const TestPage(),
-        '/second': (context) => const TestPageSecond(),
-        '/third': (context) => TestPageThird(),
-      },
-      initialRoute: '/third',
+      routes: routes,
+      initialRoute: '/',
     );
   }
 }

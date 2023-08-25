@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../data/song.dart';
-import '../data/states.dart';
+import '../bloc/app_state.dart';
 
 class SongCard extends HookConsumerWidget {
   const SongCard({
@@ -35,7 +35,7 @@ class SongCard extends HookConsumerWidget {
           vStatus.value = !vStatus.value;
           print('on Tap');
           //updateAppState();
-          appState.copyWith(isPlaying: vStatus.value, currentSong: song);
+          //appState.copyWith(isPlaying: vStatus.value, currentSong: song);
         },
         child: ListTile(
             leading: Image.network(song.albumArt!),

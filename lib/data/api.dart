@@ -3,14 +3,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'song.dart';
 
 List<String> tabs = [
-  'Puchus',
+  'motivation',
   'Papa',
   'Mummy',
 ];
 
 List<Song> songs = [
   Song(
-      tab: 'Puchus',
+      tab: 'motivation',
       songId: 0,
       title: 'A Sky Full of Stars',
       artist: 'Coldplay',
@@ -54,7 +54,12 @@ class SongApiClient {
 
   Future<List<Song>> getSongsByTab(String tab) async {
     List<Song> songs = await getSongs();
-    return Future.value(songs.where((element) => element.tab == tab).toList());
+    if ( tab == ""){
+      return Future.value(songs);
+    }
+    else{
+      return Future.value(songs.where((element) => element.tab == tab).toList());
+    }
   }
 
   // get all tabs
@@ -81,5 +86,5 @@ final songsByTabProvider =
 FutureProvider<List<Song>> songsProvider =
     FutureProvider<List<Song>>((ref) async {
   final apiClient = SongApiClient();
-  return apiClient.getSongs();
+  return apiClient.getSongsByTab("");
 });

@@ -1,103 +1,243 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:oneui/pages/widgets/fadeoutWidget.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
-import '../data/api.dart';
-import '../data/song.dart';
-import '../data/states.dart';
-import '../one_ui_nested_scrollview.dart';
-import '../widgets/audio_widget.dart';
+import '../bloc/app_state.dart';
+import 'widgets/card_button.dart';
 
-class MyHomePage extends HookConsumerWidget {
-  final String title;
-  const MyHomePage({super.key, required this.title});
+
+class HomePage extends HookConsumerWidget {
+  double maxHeight = 220;
+  double minHeight = 80;
+  double clampedHeight = 250;
+  final ScrollController scrollController = ScrollController();
+
+  HomePage({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+        body: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: scrollController, slivers: [
+      // SliverPersistentHeader(
+      //   delegate: CustomHeaderDelegate(Colors.deepOrange, "Current Streak"),
+      //   pinned: true,
+      // ),
+      SliverAppBar(
+        pinned: true,
+        floating: false,
+        expandedHeight: maxHeight,
+        flexibleSpace: _build_flexibleBar(context),
+        automaticallyImplyLeading: false,
+        primary: true,
+        collapsedHeight: 100,
+        title: const TitleWidget(),
+        backgroundColor: Colors.deepOrange,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20))),
+      ),
+
+      // SliverPersistentHeader(
+      //   pinned: true,
+      //   delegate: CustomHeaderDelegate(Colors.deepOrange, "Current Streak"),
+      // ),
+      _body(context),
+
+
+    ]));
+  }
+
+  Widget _build_flexibleBar(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return FlexibleSpaceBar(
+          background: _build_background(context),
+          collapseMode: CollapseMode.pin,
+        );
+      },
+    );
+  }
+
+  Widget _build_background(BuildContext context) {
+    return Container(
+        decoration: const BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+            // StreakWidget(clampedPosition: 100),
+            // StreakWidget(clampedPosition: 100),
+            FadeOutWidget(
+                child: const Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Pmaxit, \nIt's Checkup Time",
+                  style: TextStyle(fontSize: 20, color: Colors.white)),
+            )),
+            //MessageWidget(title: "3 days, 11 hour streak"),
+
+            const SizedBox(height: 20),
+            FadeOutWidget(
+                child: Align(
+              alignment: Alignment.centerLeft,
+              child: Material(
+                color: Theme.of(context).colorScheme.surface,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(25),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/status');
+                  },
+                  child: Container(
+                      width: 120,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25)),
+                      child: const Center(
+                          child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Begin",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.deepOrange,
+                                fontWeight: FontWeight.bold)),
+                      ))),
+                ),
+              ),
+            ))
+          ]),
+        ));
+  }
+
+  Widget _body(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.all(15.0),
+      sliver: SliverList(
+          delegate: SliverChildListDelegate([
+        const SizedBox(
+            height: 60,
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Listen to",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)))),
+         CardButton(title: "Audio", onTap: (){
+                        Navigator.pushNamed(context, '/playScreen');
+
+        },),
+        const SizedBox(height: 12),
+        const SizedBox(
+            height: 60,
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("After Checkup",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)))),
+        CardButton(title: "Notes", onTap: (){},),
+        const SizedBox(height: 12),
+        const SizedBox(
+            height: 60,
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Today",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold)))),
+        Card(
+          elevation: 3,
+          borderOnForeground: true,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: InkWell(
+            onTap: () {},
+            borderRadius: BorderRadius.circular(30.0),
+            child: const ListTile(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30))),
+              leading: Icon(Icons.local_activity_rounded, size: 40),
+              title: Text("2 activities"),
+              trailing: Icon(Icons.arrow_forward_ios),
+              isThreeLine: false,
+            ),
+          ),
+        ),
+        Card(
+          elevation: 3,
+          borderOnForeground: true,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30))),
+          child: InkWell(
+            onTap: () {
+            },
+            borderRadius: BorderRadius.circular(30.0),
+            child: const ListTile(
+              leading: Icon(Icons.microwave_rounded, size: 40),
+              title: Text("Motivation"),
+              trailing: Icon(Icons.arrow_forward_ios),
+              isThreeLine: false,
+            ),
+          ),
+        ),
+      ])),
+    );
+  }
+}
+
+class TitleWidget extends HookConsumerWidget {
+  const TitleWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // songs Provider
-    final songsApiProvider = ref.watch(songApiClientProvider);
+    
+    final rewiredPercentage = ref.watch(appStateProvider.select((value) => value.rewiredPercentage));
+    final victoryDays = ref.watch(appStateProvider.select((value) => value.victoryDays));
+    final currentGoal = ref.watch(appStateProvider.select((value) => value.currentGoal));
 
-    return Scaffold(
-        body: AnnotatedRegion<SystemUiOverlayStyle>(
-            value: const SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.light),
-            child: OneUiNestedScrollView(
-              title: "Puchu's Music App",
-              collapsedWidget: const Text("Puchu's Music App",
-                  style: TextStyle(color: Colors.white, fontSize: 20)),
-              leadingIcon: const Icon(Icons.menu, color: Colors.white),
-              boxDecoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Theme.of(context).colorScheme.primary,
-                  Theme.of(context).colorScheme.secondary,
-                ],
+    print("victory Days changed  $victoryDays");
+    return SizedBox(
+        width: double.infinity,
+        child: Row(children: [
+          CircularPercentIndicator(
+              radius: 20.0,
+              lineWidth: 10.0,
+              percent: rewiredPercentage/100,
+              progressColor: Colors.green,
+              center: Image.network(
+                "https://cdn-icons-png.flaticon.com/512/1828/1828884.png",
+                width: 10,
+                height: 10,
               )),
-              // futureprovider
-              tabs: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildSongList(songsApiProvider.getTabs().elementAt(0), ref)
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildSongList(songsApiProvider.getTabs().elementAt(1), ref)
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildSongList(songsApiProvider.getTabs().elementAt(2), ref)
-                  ],
-                ),
-              ],
-            )),
-        bottomNavigationBar: AudioWidget());
-  }
-
-  Widget _buildSongList(String tab, WidgetRef ref) {
-    // current song
-    final songs = ref.watch(songsByTabProvider(tab));
-
-    return Expanded(
-      child: songs.when(
-        data: (songs) {
-          return ListView.builder(
-            itemCount: songs.length,
-            itemBuilder: (context, index) {
-              final currentSong = ref.watch(appStateProvider).currentSong;
-              final isPlaying = ref.watch(appStateProvider).isPlaying;
-              final song = songs[index];
-
-              return ListTile(
-                onTap: () {
-                  // update the app state
-                  ref.read(appStateProvider.notifier).toggleSong(song);
-                },
-                leading: Image.network(song.albumArt!),
-                title: Text(song.title!),
-                subtitle: Text(song.artist!),
-                trailing: Icon(
-                  Icons.play_circle_fill_rounded,
-                  size: 30,
-                  color: (currentSong?.songId == song.songId && isPlaying)
-                      ? Colors.deepPurple
-                      : Colors.grey,
-                ),
-              );
-            },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Text(error.toString()),
-      ),
-    );
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               Text("$rewiredPercentage% rewired",
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold)),
+              Text("$victoryDays victory days / $currentGoal days" ,
+                  style:
+                      TextStyle(color: Colors.deepOrange[200], fontSize: 16)),
+            ],
+          )
+        ]));
   }
 }

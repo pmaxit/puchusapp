@@ -1,13 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 
-import '../data/song.dart';
-import '../data/states.dart';
+import '../bloc/app_state.dart';
 
 String formatDuration(Duration duration) {
   final minutes = duration.inMinutes.remainder(60);
@@ -34,13 +32,14 @@ class AudioWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appState = ref.watch(appStateProvider);
-    final song = appState.currentSong;
-    final isPlaying = appState.isPlaying;
-
+    final song = ref.watch(appStateProvider.notifier).currentSong;
+    final isPlaying = ref.watch(appStateProvider.notifier).isPlaying;
+    
+    
     final sliderValue = useState(0.0);
     final durationValue = useState<double>(0.0);
 
+    print("new song : ${song?.title} isPlaying : $isPlaying ");
     final audioPlayer = useMemoized(() {
       final player = AudioPlayer();
 
@@ -104,7 +103,7 @@ class AudioWidget extends HookConsumerWidget {
 
     return Container(
         height: 150,
-        color: Theme.of(context).colorScheme.primary,
+        color: Colors.deepOrangeAccent,
         child: Column(
           children: [
             // song progress bar
@@ -147,48 +146,42 @@ class AudioWidget extends HookConsumerWidget {
             Row(
               children: [
                 // song image
-                if (song != null)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(width: 10),
-                        Text(song.artist!,
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 14)),
-                      ],
-                    ),
-                  ),
+         
                 // song label
+                Expanded(
+                    child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(width: 30),
+                      IconButton(
+                        icon: const Icon(Icons.skip_previous, size: 40),
+                        onPressed: () {},
+                        color: Colors.white,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                            isPlaying
+                                ? Icons.pause
+                                : Icons.play_circle_fill_rounded,
+                            size: 60),
+                        onPressed: () {
+                          // toggle the last playing song
+                          ref.read(appStateProvider.notifier).toggleSong(song);
+                        },
+                        color: Colors.white,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.skip_next, size: 40),
+                        onPressed: () {},
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 30),
+                    ],
+                  ),
+                ))
 
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.skip_previous, size: 40),
-                  onPressed: () {},
-                  color: Colors.white,
-                ),
-                IconButton(
-                  icon: Icon(
-                      isPlaying ? Icons.pause : Icons.play_circle_fill_rounded,
-                      size: 60),
-                  onPressed: () {
-                    // toggle the last playing song
-                    ref.read(appStateProvider.notifier).toggleSong(song);
-                  },
-                  color: Colors.white,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.skip_next, size: 40),
-                  onPressed: () {},
-                  color: Colors.white,
-                ),
-                const Spacer(),
                 // reshuffle Icon,
-                IconButton(
-                  icon: const Icon(Icons.shuffle, size: 30),
-                  onPressed: () {},
-                  color: Colors.white,
-                ),
               ],
             )
           ],
