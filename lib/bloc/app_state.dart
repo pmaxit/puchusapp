@@ -4,8 +4,9 @@
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../data/api.dart';
-import '../data/song.dart';
+import '../data/data.dart' as data;
+import '../models/api.dart';
+import '../models/models.dart';
 
 
 class AppState {
@@ -19,6 +20,10 @@ class AppState {
   int currentGoal;
   int finalGoal;
   final DateTime? startDate;
+  final User? user;
+  final List<Story> stories;
+  final List<Post> posts;
+  final List<Journal> journals;
 
   AppState({
     required this.songs,
@@ -29,7 +34,11 @@ class AppState {
     this.victoryDays = 0,
     this.currentGoal = 1,
     this.startDate,
-    this.finalGoal = 21
+    this.finalGoal = 21,
+    this.user,
+    this.stories = const [],
+    this.posts = const [],
+    this.journals = const []
   
   });
 
@@ -43,6 +52,11 @@ class AppState {
         currentGoal: 1,
         // previous day 
         startDate: DateTime.now().subtract(Duration(days: 0)),
+        finalGoal: 21,
+        user: data.currentUser,
+        stories: data.stories,
+        posts: data.posts,
+        journals: data.journals
       );
 
   // copyWith
@@ -55,6 +69,12 @@ class AppState {
     int? victoryDays,
     DateTime? startDate,
     int? currentGoal,
+    int? finalGoal,
+    User? user,
+    List<Story>? stories,
+    List<Post>? posts,
+    List<Journal>? journals
+    
   }) {
     return AppState(
       songs: songs ?? this.songs,
@@ -65,12 +85,27 @@ class AppState {
       victoryDays: victoryDays ?? this.victoryDays,
       startDate: startDate ?? this.startDate,
       currentGoal: currentGoal ?? this.currentGoal,
+      finalGoal: finalGoal?? this.finalGoal,
+      user: user?? this.user,
+      stories: stories?? this.stories,
+      posts: posts?? this.posts,
+      journals: journals?? this.journals
+
     );
   }
 }
 
 class AppStateNotifier extends StateNotifier<AppState> {
   AppStateNotifier() : super(AppState.initial());
+
+
+  void setup() async{
+    calculateVictoryDays();
+    calculateRewiredPercentage();
+    getStories();
+    getPosts();
+
+  }
 
   void calculateVictoryDays(){
     // difference between current date and start date
@@ -85,6 +120,14 @@ class AppStateNotifier extends StateNotifier<AppState> {
     else{
       state = state.copyWith(victoryDays: victoryDays);
     }
+  }
+
+  void getStories(){
+    state = state.copyWith(stories: data.stories);
+  }
+
+  void getPosts(){
+    state = state.copyWith(posts: data.posts);
   }
 
   void selectFirstSong(){
@@ -121,6 +164,10 @@ class AppStateNotifier extends StateNotifier<AppState> {
     state = state.copyWith(songs: songs);
   }
 
+  void addJournal(Journal journal) {
+    state = state.copyWith(journals: [...state.journals, journal]);
+  }
+
   void playSong(Song currentSong) {
     state = state.copyWith(
       isPlaying: true,
@@ -149,16 +196,32 @@ class AppStateNotifier extends StateNotifier<AppState> {
   bool get isPlaying => state.isPlaying;
   List<Song> get songs => state.songs;
   Song? get previousSong => state.previousSong;
+  int get rewiredPercentage => state.rewiredPercentage;
+  int get victoryDays => state.victoryDays;
+  int get currentGoal => state.currentGoal;
+  DateTime? get startDate => state.startDate;
+  int get finalGoal => state.finalGoal;
+  User? get user => state.user;
+  List<Story> get stories => state.stories;
+  List<Post> get posts => state.posts;
+  List<Journal> get journals => state.journals;
+
 }
 
 // appStateProvider
 final appStateProvider =
     StateNotifierProvider<AppStateNotifier, AppState>((ref) {
-  // get songs from songs API
-  AppStateNotifier appStateNotifier = AppStateNotifier()..calculateVictoryDays()..calculateRewiredPercentage();
 
+  // setting up the state 
+  AppStateNotifier appStateNotifier = AppStateNotifier()..setup();
+
+  // get songs from songs API
   final songs = ref.watch(songsProvider);
-  songs.whenData((value) => appStateNotifier..addSongs(value)..selectFirstSong());
+
+  // add new songs
+  songs.whenData((songsList) {
+    appStateNotifier..addSongs(songsList)..selectFirstSong();
+  });
 
   return appStateNotifier;
 });

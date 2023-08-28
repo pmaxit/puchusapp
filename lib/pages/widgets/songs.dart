@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/api.dart';
-import '../../data/song.dart';
+import '../../models/api.dart';
+import '../../models/song.dart';
 
 class SongsList extends HookConsumerWidget {
   final String tab;

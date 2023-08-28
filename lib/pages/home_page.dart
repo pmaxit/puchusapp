@@ -147,7 +147,10 @@ class HomePage extends HookConsumerWidget {
                         color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold)))),
-        CardButton(title: "Notes", onTap: (){},),
+        CardButton(title: "Notes", onTap: (){
+                        Navigator.pushNamed(context, '/password');
+        
+        },),
         const SizedBox(height: 12),
         const SizedBox(
             height: 60,
@@ -183,6 +186,8 @@ class HomePage extends HookConsumerWidget {
               borderRadius: BorderRadius.all(Radius.circular(30))),
           child: InkWell(
             onTap: () {
+                    Navigator.pushNamed(context, '/journal');
+
             },
             borderRadius: BorderRadius.circular(30.0),
             child: const ListTile(

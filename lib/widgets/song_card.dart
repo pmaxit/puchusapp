@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../data/song.dart';
+import '../models/song.dart';
 import '../bloc/app_state.dart';
 
 class SongCard extends HookConsumerWidget {
