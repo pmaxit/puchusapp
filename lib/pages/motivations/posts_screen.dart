@@ -8,6 +8,7 @@ import 'post_card.dart';
 import 'story_container.dart';
 
 class PostsScreen extends StatelessWidget {
+  final double minHeight = 80;
   const PostsScreen({super.key});
 
   @override
@@ -16,23 +17,23 @@ class PostsScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers:[
           SliverAppBar(
-            
+            pinned: true,
+            floating: false,
+            automaticallyImplyLeading: true,
+            primary: true,
+            collapsedHeight: minHeight,
+            title: titleWidget(),
             leading: IconButton(
-              onPressed: (){
-                Navigator.popUntil(context, ModalRoute.withName('/'));
-              }, 
-              icon: const Icon(Icons.arrow_back, color: Colors.white)
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-
             backgroundColor: Colors.deepOrange,
-            centerTitle: true,
-            title: const Text('Motivation'),
-            floating: true,
-            actions: [
-              IconButton(onPressed: (){ 
-              
-              }, icon: const Icon(Icons.search, color: Colors.white))
-            ]
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20))),
           ),
 
           const SliverToBoxAdapter(
@@ -44,6 +45,15 @@ class PostsScreen extends StatelessWidget {
           
         ]
       )
+    );
+  }
+    Widget titleWidget() {
+    return const Text(
+      'Motivation',
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+      ),
     );
   }
 

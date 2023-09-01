@@ -11,6 +11,7 @@ import '../../models/api.dart';
 
 class NotesPage extends HookConsumerWidget {
   const NotesPage({super.key});
+  final double minHeight = 80;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,36 +67,24 @@ class NotesPage extends HookConsumerWidget {
               //   pinned: true,
               // ),
               SliverAppBar(
-                  backgroundColor: Colors.deepOrange,
-                  centerTitle: true,
-                  title: const Text('Journal'),
-                  floating: true,
-                  actions: [
-                    listView.value
-                        ? IconButton(
-                            onPressed: () {
-                              scrollController.animateTo(
-                                  scrollController.position.minScrollExtent,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              listView.value = false;
-                            },
-                            icon: const Icon(Icons.grid_view,
-                                color: Colors.white))
-                        : IconButton(
-                            onPressed: () {
-                              scrollController.animateTo(
-                                  scrollController.position.minScrollExtent,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              listView.value = true;
-                            },
-                            icon: const Icon(Icons.list_rounded,
-                                color: Colors.white)),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.search, color: Colors.white))
-                  ]),
+            pinned: true,
+            floating: false,
+            automaticallyImplyLeading: true,
+            primary: true,
+            collapsedHeight: minHeight,
+            title: titleWidget(),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            backgroundColor: Colors.deepOrange,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20))),
+          ),
 
               journals.when(
                   data: (data) {
@@ -118,6 +107,15 @@ class NotesPage extends HookConsumerWidget {
   }
 
 
+    Widget titleWidget() {
+    return const Text(
+      'Notes',
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+      ),
+    );
+  }
   Widget journalListView(List<Future<Journal>> data){
     return SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {

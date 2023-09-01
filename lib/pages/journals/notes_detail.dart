@@ -49,20 +49,38 @@ class NotesDetail extends HookConsumerWidget {
       //   delegate: CustomHeaderDelegate(Colors.deepOrange, "Current Streak"),
       //   pinned: true,
       // ),
-          SliverAppBar(
+ SliverAppBar(
+            pinned: true,
+            floating: false,
+            automaticallyImplyLeading: true,
+            primary: true,
+            collapsedHeight: 80,
+            title: titleWidget(),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             backgroundColor: Colors.deepOrange,
-            centerTitle: true,
-            title: Text(note.title),
-            floating: true,
-            actions: [
-              IconButton(onPressed: (){ 
-              
-              }, icon: const Icon(Icons.search, color: Colors.white))
-            ]
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20))),
           ),
 
           SliverToBoxAdapter(child: buildNotesDetail(note, textController))
     ]));
+  }
+
+      Widget titleWidget() {
+    return const Text(
+      'Notes',
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+      ),
+    );
   }
 
   Widget buildNotesDetail(Journal note, TextEditingController textController){
