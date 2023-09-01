@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../bloc/app_state.dart';
+import '../../bloc/app_state_provider.dart';
 
 class PlayWidget extends HookConsumerWidget {
   final double size=40;

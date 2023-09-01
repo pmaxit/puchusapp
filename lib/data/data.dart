@@ -1,106 +1,124 @@
+import 'package:uuid/uuid.dart';
+
 import '../models/models.dart';
+import '../models/user_model.dart';
 
-final User currentUser = User(
-  name: 'Puneet Girdhar',
-   imageUrl:
-      'https://images.unsplash.com/photo-1578133671540-edad0b3d689e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80',
-);
 
-final List<User> onlineUsers = [
-  User(
+final List<UserModel> onlineUsers = [
+  UserModel(
+    uid: Uuid().v4(),
     name: 'David Brooks',
     imageUrl:
         'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Jane Doe',
     imageUrl:
         'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Matthew Hinkle',
     imageUrl:
         'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1331&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Amy Smith',
     imageUrl:
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Ed Morris',
     imageUrl:
         'https://images.unsplash.com/photo-1521119989659-a83eee488004?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=664&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Carolyn Duncan',
     imageUrl:
         'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Paul Pinnock',
     imageUrl:
         'https://images.unsplash.com/photo-1519631128182-433895475ffe?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
       name: 'Elizabeth Wong',
       imageUrl:
           'https://images.unsplash.com/photo-1515077678510-ce3bdf418862?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjF9&auto=format&fit=crop&w=675&q=80'),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'James Lathrop',
     imageUrl:
         'https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=592&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Jessie Samson',
     imageUrl:
         'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'David Brooks',
     imageUrl:
         'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Jane Doe',
     imageUrl:
         'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Matthew Hinkle',
     imageUrl:
         'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1331&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Amy Smith',
     imageUrl:
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Ed Morris',
     imageUrl:
         'https://images.unsplash.com/photo-1521119989659-a83eee488004?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=664&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Carolyn Duncan',
     imageUrl:
         'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Paul Pinnock',
     imageUrl:
         'https://images.unsplash.com/photo-1519631128182-433895475ffe?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
       name: 'Elizabeth Wong',
       imageUrl:
           'https://images.unsplash.com/photo-1515077678510-ce3bdf418862?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjF9&auto=format&fit=crop&w=675&q=80'),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'James Lathrop',
     imageUrl:
         'https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=592&q=80',
   ),
-  User(
+  UserModel(
+    uid: Uuid().v4(),
     name: 'Jessie Samson',
     imageUrl:
         'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
@@ -166,7 +184,7 @@ final List<Story> stories = [
 
 final List<Post> posts = [
   Post(
-    user: currentUser,
+    user: onlineUsers[7],
     caption: 'Check out these cool puppers',
     timeAgo: '58m',
     imageUrl: 'https://images.unsplash.com/photo-1525253086316-d0c936c814f8',
@@ -228,47 +246,5 @@ final List<Post> posts = [
 
 // list of personal journal entries
 List<Journal> journals= [
-  Journal(
-    date: '2021-09-01',
-    title: 'First Journal',
-    content: 'This is my first journal entry',
-    timeAgo: '1d'
-  ),
-  Journal(
-    date: '2021-09-02',
-    title: 'Second Journal',
-    content: 'This is my second journal entry',
-    timeAgo: '2d'
-  ),
-  Journal(
-    date: '2021-09-03',
-    title: 'Third Journal',
-    content: 'This is my third journal entry',
-    timeAgo: '3d'
-  ),
-  Journal(
-    date: '2021-09-04',
-    title: 'Fourth Journal',
-    content: 'This is my fourth journal entry',
-    timeAgo: '4d'
-  ),
-  Journal(
-    date: '2021-09-05',
-    title: 'Fifth Journal',
-    content: 'This is my fifth journal entry',
-    timeAgo: '5d'
-  ),
-  Journal(
-    date: '2021-09-06',
-    title: 'Sixth Journal',
-    content: 'This is my sixth journal entry',
-    timeAgo: '6d'
-  ),
-  Journal(
-    date: '2021-09-07',
-    title: 'Seventh Journal',
-    content: 'This is my seventh journal entry',
-    timeAgo: '7d'
-  ),
-
+  
 ];

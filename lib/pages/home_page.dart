@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:oneui/pages/widgets/fadeoutWidget.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-import '../bloc/app_state.dart';
+import '../bloc/app_state_provider.dart';
 import 'widgets/card_button.dart';
 
 
@@ -25,7 +25,7 @@ class HomePage extends HookConsumerWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           controller: scrollController, slivers: [
       // SliverPersistentHeader(
-      //   delegate: CustomHeaderDelegate(Colors.deepOrange, "Current Streak"),
+      //   delegate: CustomHeaderDelegate(Colors.deepOrange, "Current -"),
       //   pinned: true,
       // ),
       SliverAppBar(
@@ -133,7 +133,7 @@ class HomePage extends HookConsumerWidget {
                         color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold)))),
-         CardButton(title: "Audio", onTap: (){
+         CardButton(title: "Playlist", onTap: (){
                         Navigator.pushNamed(context, '/playScreen');
 
         },),
@@ -167,13 +167,15 @@ class HomePage extends HookConsumerWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/todo');
+            },
             borderRadius: BorderRadius.circular(30.0),
             child: const ListTile(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(30))),
               leading: Icon(Icons.local_activity_rounded, size: 40),
-              title: Text("2 activities"),
+              title: Text("Todo List"),
               trailing: Icon(Icons.arrow_forward_ios),
               isThreeLine: false,
             ),
@@ -211,12 +213,21 @@ class TitleWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     
-    final rewiredPercentage = ref.watch(appStateProvider.select((value) => value.rewiredPercentage));
-    final victoryDays = ref.watch(appStateProvider.select((value) => value.victoryDays));
-    final currentGoal = ref.watch(appStateProvider.select((value) => value.currentGoal));
+    final currentState = ref.watch(currentStateProvider);
 
-    print("victory Days changed  $victoryDays");
-    return SizedBox(
+    return currentState.when(
+      loading: (){
+        return const Text("Loading");
+      },
+      error: (error, stackTrace){
+        return const Text("Error");
+      },
+      data: (value){
+        final rewiredPercentage = value['rewiredPercentage'];
+        final currentGoal = value['currentGoal'];
+        final victoryDays = value['victoryDays'];
+
+        return SizedBox(
         width: double.infinity,
         child: Row(children: [
           CircularPercentIndicator(
@@ -244,5 +255,7 @@ class TitleWidget extends HookConsumerWidget {
             ],
           )
         ]));
+      }
+    );
   }
 }

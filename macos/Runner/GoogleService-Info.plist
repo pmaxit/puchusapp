@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>610828596105-5runkalcfbf2t9p0r2qlblt64mt6h65s.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.610828596105-5runkalcfbf2t9p0r2qlblt64mt6h65s</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAixtd9mcVz28viGZH2kRvcYJ_L5y1iVEM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>610828596105</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.oneui.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>puchusapp</string>
+	<key>STORAGE_BUCKET</key>
+	<string>puchusapp.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:610828596105:ios:bbb64cb07bf7e21af8a758</string>
+</dict>
+</plist>
