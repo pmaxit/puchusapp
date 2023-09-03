@@ -46,4 +46,10 @@ class UserModel {
     };
   }
 
+  // generate image
+  static String generateImageUrl() {
+    final uuid = Uuid();
+    return 'https://picsum.photos/id/${uuid.v4()}/200/200';
+  }
+
 }

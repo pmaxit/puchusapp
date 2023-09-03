@@ -4,6 +4,33 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:oneui/bloc/custom_login_provider.dart';
 
 
+
+    // Random list of colors 
+    List<Color> colors = [
+      Colors.deepOrange,
+      Colors.deepPurple,
+      Colors.green,
+      Colors.blue,
+      Colors.pink,
+      Colors.red,
+      Colors.yellow,
+      Colors.orange,
+      Colors.purple,
+      Colors.indigo,
+      Colors.teal,
+      Colors.cyan,
+      Colors.brown,
+      Colors.grey,
+      Colors.blueGrey,
+      Colors.lime,
+      Colors.lightBlue,
+      Colors.lightGreen,
+      Colors.amber,
+      Colors.black,
+      Colors.white
+    ];
+
+
 class PasswordPage extends HookConsumerWidget {
   const PasswordPage({super.key,
   });
@@ -51,28 +78,38 @@ class PasswordPage extends HookConsumerWidget {
 
           SliverGrid.builder(gridDelegate: 
           const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, 
-          crossAxisSpacing: 20, mainAxisSpacing: 10
+          crossAxisSpacing: 50, mainAxisSpacing: 10
           ),
            itemBuilder: (context, index){
-            return Material(
-              color: Colors.transparent,
-              child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: InkWell(
-                onTap: (){
-                  currentPassword.value = currentPassword.value + index.toString();
-                  if(currentPassword.value.length == 4){
-                    customLogin.checkPassword(currentPassword.value);
-                    Navigator.pushReplacementNamed(context, '/notes');
-                    currentPassword.value = "";
-                  }
-                },
-                child: PasswordEntry(index: index)),
-            ));
-          }, itemCount: 12
+            return Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Material(
+                  color: colors[index],
+                  child: InkWell(
+                            splashColor: Theme.of(context).primaryColorLight,
+                    
+                    onTap: (){
+                      currentPassword.value = currentPassword.value + index.toString();
+                      if(currentPassword.value.length == CustomLogin.privateSpacePassword.length){
+                        customLogin.checkPassword(currentPassword.value);
+                        Navigator.pushReplacementNamed(context, '/notes');
+                        currentPassword.value = "";
+                      }
+                    },
+                    child: Container(
+                  
+                  child: Center(child: Text(index.toString(), style: const TextStyle(color: Colors.white, fontSize: 20),)),
+                ),
+              ),
+                ),
+              ),
+            );
+          }, itemCount: 9
           
           ),
-          const SliverToBoxAdapter(child: const SizedBox(height: 100,width: double.infinity)),
+           SliverToBoxAdapter(child:  SizedBox(height: 200,width: double.infinity, child:  Center(child: Icon(Icons.fingerprint, color: Colors.red.shade200, size: 100,)))),
           
           ]));
   }
@@ -94,42 +131,11 @@ class PasswordEntry extends StatelessWidget {
   
    PasswordEntry({super.key, required this.index});
 
-    // Random list of colors 
-    List<Color> colors = [
-      Colors.deepOrange,
-      Colors.deepPurple,
-      Colors.green,
-      Colors.blue,
-      Colors.pink,
-      Colors.red,
-      Colors.yellow,
-      Colors.orange,
-      Colors.purple,
-      Colors.indigo,
-      Colors.teal,
-      Colors.cyan,
-      Colors.brown,
-      Colors.grey,
-      Colors.blueGrey,
-      Colors.lime,
-      Colors.lightBlue,
-      Colors.lightGreen,
-      Colors.amber,
-      Colors.black,
-      Colors.white
-    ];
-
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      color: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: index %2 == 0 ? BorderRadius.circular(10): BorderRadius.zero,
-          color: colors[index]
-        ),
-        height: 10, width: 10));
+    return Container(
+      
+      child: Center(child: Text(index.toString(), style: const TextStyle(color: Colors.white, fontSize: 20),)),
+    );
   }
 }

@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../../bloc/app_state_provider.dart';
+import 'recording_widget.dart';
 
 String formatDuration(Duration duration) {
   final minutes = duration.inMinutes.remainder(60);
@@ -39,7 +40,6 @@ class AudioWidget extends HookConsumerWidget {
     
     final sliderValue = useState(0.0);
     final durationValue = useState<double>(0.0);
-    print("new song $song");
     final audioPlayer = useMemoized(() {
       final player = AudioPlayer();
 
@@ -67,7 +67,6 @@ class AudioWidget extends HookConsumerWidget {
     // listen to audio Player changes
     useEffect(() {
       subscription = audioPlayer.positionStream.listen((position) {
-        print("position: $position");
         sliderValue.value = position.inSeconds.toDouble();
       });
 
@@ -153,45 +152,74 @@ class AudioWidget extends HookConsumerWidget {
                 const SizedBox(width: 24),
               ],
             ),
-            Row(
+            Stack(
               children: [
-                // song image
-         
-                // song label
-                Expanded(
-                    child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      const SizedBox(width: 30),
-                      IconButton(
-                        icon: const Icon(Icons.skip_previous, size: 40),
-                        onPressed: () {},
-                        color: Colors.white,
-                      ),
-                      IconButton(
-                        icon: Icon(
-                            isPlaying
-                                ? Icons.pause
-                                : Icons.play_circle_fill_rounded,
-                            size: 60),
-                        onPressed: () {
-                          // toggle the last playing song
-                          ref.read(appStateProvider.notifier).toggleSong(song);
-                        },
-                        color: Colors.white,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.skip_next, size: 40),
-                        onPressed: () {},
-                        color: Colors.white,
-                      ),
-                      const SizedBox(width: 30),
-                    ],
+                Row(
+                  children: [
+                    // song image
+                       
+                    // song label
+                    Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const SizedBox(width: 30),
+                            IconButton(
+                              icon: const Icon(Icons.skip_previous, size: 40),
+                              onPressed: () {},
+                              color: Colors.white,
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                  isPlaying
+                                      ? Icons.pause
+                                      : Icons.play_circle_fill_rounded,
+                                  size: 60),
+                              onPressed: () {
+                                // toggle the last playing song
+                                ref.read(appStateProvider.notifier).toggleSong(song);
+                              },
+                              color: Colors.white,
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.skip_next, size: 40),
+                              onPressed: () {},
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 30),
+                          ],
+                        ))
+            
+                    // reshuffle Icon,
+                  ],
+                ),
+
+                Positioned(
+                  top:0,
+                  bottom: 0,
+                  right: 18,
+                  child: CircleAvatar(
+                    
+                    child: IconButton(
+                      icon: const Icon(Icons.mic_rounded),
+                      onPressed: () {
+                        //showModal
+                        showModalBottomSheet(context: context, builder: (context){
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                              color: Colors.white
+                            ),
+                            child: RecordingWidget(),
+                          );
+                        });
+
+                      },
+                      color: Colors.red.shade400,
                   ),
                 ))
-
-                // reshuffle Icon,
               ],
             )
           ],

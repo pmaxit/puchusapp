@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Puchus App',
+      title: 'Life Changing Affirmations',
       theme: lightTheme,
       routes: routes,
       initialRoute: '/splash',

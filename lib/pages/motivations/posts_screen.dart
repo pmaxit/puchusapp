@@ -14,36 +14,41 @@ class PostsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: CustomScrollView(
-        slivers:[
-          SliverAppBar(
-            pinned: true,
-            floating: false,
-            automaticallyImplyLeading: true,
-            primary: true,
-            collapsedHeight: minHeight,
-            title: titleWidget(),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+      body: GestureDetector(
+        // opaque
+        behavior:  HitTestBehavior.opaque ,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: CustomScrollView(
+          slivers:[
+            SliverAppBar(
+              pinned: true,
+              floating: false,
+              automaticallyImplyLeading: true,
+              primary: true,
+              collapsedHeight: minHeight,
+              title: titleWidget(),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              backgroundColor: Colors.deepOrange,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20))),
             ),
-            backgroundColor: Colors.deepOrange,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20))),
-          ),
-
-          const SliverToBoxAdapter(
-            child: StoryContainer()
-          ),
-
-          const PostsContainer()
-
-          
-        ]
+      
+            const SliverToBoxAdapter(
+              child: StoryContainer()
+            ),
+      
+            const PostsContainer()
+      
+            
+          ]
+        ),
       )
     );
   }

@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:oneui/bloc/app_state_provider.dart';
 import 'package:oneui/bloc/auth_provider.dart';
+import 'package:oneui/bloc/custom_login_provider.dart';
 import 'package:oneui/models/post_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,6 +19,8 @@ class CreateNote extends HookConsumerWidget {
     final scrollController = useScrollController();
     final titleEditor = useTextEditingController();
     final contentEditor = useTextEditingController();
+    final customLoginState = ref.watch(customLoginProvider);
+
 
     final onSubmit = useCallback(() async {
       final title = titleEditor.text;
@@ -24,6 +28,10 @@ class CreateNote extends HookConsumerWidget {
       final note = Journal(
         user: ref.read(currentUserProvider),
         documentId: const Uuid().v4(),
+        createdAt: Timestamp.now(),
+        pinned: false,
+        position: 100,
+        space: customLoginState.status == CustomLoginStatus.privateSpace ? "private": "public",
         title: title, content: content, date: DateTime.now().toString(), timeAgo: 'Now');
       await ref.read(firebaseDBProvider).addJournal(note);
       
@@ -33,30 +41,36 @@ class CreateNote extends HookConsumerWidget {
      return Scaffold(
         // floating action button
         
-        body: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: scrollController, slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.deepOrange,
-            centerTitle: true,
-            title: const Text("Create Note"),
-            floating: true,
-            actions: [
-              IconButton(onPressed: (){ 
-              
-              }, icon: const Icon(Icons.search, color: Colors.white))
-            ]
-          ),
-          
-          SliverToBoxAdapter(child: buildNotesDetail(
-            titleEditor: titleEditor,
-            contentEditor: contentEditor
-          )),
-          
-          SliverPadding(
-            padding: const EdgeInsets.all(8.0),
-            sliver: SliverToBoxAdapter(child: submitButton(onSubmit: onSubmit)))
-    ]));
+        body: GestureDetector(
+          // opaque
+          behavior:  HitTestBehavior.opaque ,
+          onTap: () => FocusScope.of(context).unfocus(),
+
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: scrollController, slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.deepOrange,
+              centerTitle: true,
+              title: const Text("Create Note"),
+              floating: true,
+              actions: [
+                IconButton(onPressed: (){ 
+                
+                }, icon: const Icon(Icons.search, color: Colors.white))
+              ]
+            ),
+            
+            SliverToBoxAdapter(child: buildNotesDetail(
+              titleEditor: titleEditor,
+              contentEditor: contentEditor
+            )),
+            
+            SliverPadding(
+              padding: const EdgeInsets.all(8.0),
+              sliver: SliverToBoxAdapter(child: submitButton(onSubmit: onSubmit)))
+            ]),
+        ));
   }
 
   Widget buildNotesDetail({required TextEditingController titleEditor, required TextEditingController contentEditor}){

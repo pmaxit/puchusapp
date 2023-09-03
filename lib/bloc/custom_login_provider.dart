@@ -8,7 +8,7 @@ enum CustomLoginStatus{
 
 class CustomLogin extends ChangeNotifier{
     
-    final String privateSpacePassword = "1234";
+    static String privateSpacePassword = "127022";
     
     
     final List<String> passwords= [];

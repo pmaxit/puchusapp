@@ -25,7 +25,6 @@ class SongsList extends HookConsumerWidget {
   }
 
   Widget _buildList(List<Song> songs, Song? currentSong) {
-    print("CURRENT .................. $currentSong");
     return ListView.builder(
       itemCount: songs.length,
       itemExtent: 80,

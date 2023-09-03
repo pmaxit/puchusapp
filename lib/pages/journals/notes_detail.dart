@@ -33,44 +33,53 @@ class NotesDetail extends HookConsumerWidget {
               title: note.title,
               content: textController.text,
               date: note.date,
+              space: note.space,
               timeAgo: note.timeAgo,
+              createdAt: note.createdAt,
+              pinned: note.pinned,
+              position: note.position
 
              
             );
-            ref.read(firebaseDBProvider).addJournal(updatedNote);
+            ref.read(firebaseDBProvider).addJournal(updatedNote).then((value) => Navigator.pop(context));
           },
           backgroundColor: Colors.deepOrange,
           child: const Icon(Icons.save, color: Colors.white,),
         ),
-        body: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: scrollController, slivers: [
-      // SliverPersistentHeader(
-      //   delegate: CustomHeaderDelegate(Colors.deepOrange, "Current Streak"),
-      //   pinned: true,
-      // ),
- SliverAppBar(
-            pinned: true,
-            floating: false,
-            automaticallyImplyLeading: true,
-            primary: true,
-            collapsedHeight: 80,
-            title: titleWidget(),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+        body: GestureDetector(
+          // opaque
+          behavior:  HitTestBehavior.opaque ,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            controller: scrollController, slivers: [
+              // SliverPersistentHeader(
+              //   delegate: CustomHeaderDelegate(Colors.deepOrange, "Current Streak"),
+              //   pinned: true,
+              // ),
+         SliverAppBar(
+              pinned: true,
+              floating: false,
+              automaticallyImplyLeading: true,
+              primary: true,
+              collapsedHeight: 80,
+              title: titleWidget(),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              backgroundColor: Colors.deepOrange,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20))),
             ),
-            backgroundColor: Colors.deepOrange,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20))),
-          ),
-
-          SliverToBoxAdapter(child: buildNotesDetail(note, textController))
-    ]));
+        
+            SliverToBoxAdapter(child: buildNotesDetail(note, textController))
+            ]),
+        ));
   }
 
       Widget titleWidget() {

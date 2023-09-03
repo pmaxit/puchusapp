@@ -1,7 +1,10 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../bloc/auth_provider.dart';
 import '../../models/models.dart';
 
 class PostCard extends StatelessWidget{
@@ -23,8 +26,8 @@ class PostCard extends StatelessWidget{
             children: [
             PostHeader(post: post),
             const SizedBox(height: 10.0,),
-            Text(post.caption!),
-            post.imageUrl != null ? const SizedBox.shrink() : const SizedBox(height: 10.0,),
+            MarkdownBody(data: post.caption!),
+            const SizedBox(height: 10.0,),
           ]),
 
           post.imageUrl != null ? CachedNetworkImage(imageUrl: post.imageUrl!): const SizedBox.shrink(),
@@ -83,20 +86,20 @@ class PostStats  extends StatelessWidget {
   }
 }
 
-class PostHeader extends StatelessWidget {
+class PostHeader extends HookConsumerWidget {
   final Post post;
   const PostHeader({super.key, required this.post});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(children: [
-      ProfileAvatar(imageUrl: "https://i.pravatar.cc/300"),
+      ProfileAvatar(imageUrl: post.user.imageUrl!),
       const SizedBox(width: 10.0,),
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(post.user.name ?? "User Name"),
+            Text(post.user.name!, style: const TextStyle(fontWeight: FontWeight.bold),),
             Row(
               children: [
                 Text('${post.timeAgo} • ', style: TextStyle(color: Colors.grey[600], fontSize: 12.0),),
@@ -106,7 +109,30 @@ class PostHeader extends StatelessWidget {
           ]
         )
       ),
-      IconButton(onPressed: (){}, icon: const Icon(Icons.more_horiz))
+
+       PopupMenuButton(
+          child: Icon(Icons.more_vert),
+          onSelected: (value){
+            if(value == 'edit'){
+              // edit post
+            }
+            else if(value == 'delete'){
+              if(post.user.uid == ref.read(authProvider).currentUser!.uid){
+                 ref.read(firebaseDBProvider).deletePost(post.documentId!); 
+              }
+              else{
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('You can only delete your own posts')));
+              }
+              
+            }
+          },  
+          itemBuilder: (BuildContext context){
+          return [
+            PopupMenuItem(child: Text('Edit Post'), value: 'edit',),
+            PopupMenuItem(child: Text('Delete Post'), value: 'delete'),
+          ];
+        })
+
    ],);
   }
 }

@@ -77,6 +77,17 @@ class SplashScreenState extends ConsumerState<ImageSplashScreen> {
                       fontWeight: FontWeight.w300,
                     ),
                   ),
+                   SizedBox(height: 40),
+                  Text(
+                    "21 days goal. Keep going!",
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                    )),
+                  
+                  
+
                 ],
               ),
             )

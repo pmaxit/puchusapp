@@ -226,6 +226,7 @@ class TitleWidget extends HookConsumerWidget {
         final rewiredPercentage = value['rewiredPercentage'];
         final currentGoal = value['currentGoal'];
         final victoryDays = value['victoryDays'];
+        final daysLeft = 21 - victoryDays;
 
         return SizedBox(
         width: double.infinity,
@@ -249,7 +250,7 @@ class TitleWidget extends HookConsumerWidget {
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold)),
-              Text("$victoryDays victory days / $currentGoal days" ,
+              Text("$victoryDays victory | $daysLeft days to go.." ,
                   style:
                       TextStyle(color: Colors.deepOrange[200], fontSize: 16)),
             ],

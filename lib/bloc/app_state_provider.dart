@@ -260,7 +260,7 @@ final journalsProvider = StreamProvider<List<Future<Journal>>>((ref) {
     // get the private space journals
     return firebaseDB.noteStream();
   } else {
-    return Stream.value([]);
+    return firebaseDB.notePublicStream();
   }
 });
 

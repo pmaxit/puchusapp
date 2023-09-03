@@ -98,89 +98,72 @@ class TodoPage extends HookConsumerWidget {
         height: 20,
       ),
       
-       TabBar(
-        controller: tabController,
-        tabs: [
-      Tab(
-        text: 'Urgent',
-      ),
-      Tab(
-        text: 'Completed',
-      ),
-    ],
-    indicatorColor: Colors.deepOrange,
-    labelColor: Colors.deepOrange,
-    unselectedLabelColor: Colors.grey,
-    ),
+       Column(
+         children: [
+           TabBar(
+            controller: tabController,
+            tabs: [
+               Tab(
+            text: 'Urgent',
+               ),
+               Tab(
+            text: 'Completed',
+               ),
+             ],
+             indicatorColor: Colors.deepOrange,
+             labelColor: Colors.deepOrange,
+             unselectedLabelColor: Colors.grey,
+                padding: EdgeInsets.zero,
+   indicatorPadding: EdgeInsets.zero,
+   labelPadding: EdgeInsets.zero,
+             ),
 
     // TabbarView
     SizedBox(
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height * 0.6,
       child: TabBarView(
         controller: tabController,
-        children: [
-          // Urgent
-          StreamBuilder(stream: todosIncomplete, builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return FutureBuilder(
-                      future: snapshot.data![index],
-                      builder: (context, snapshot) {
-                        if(snapshot.hasError) {
-                          return  SizedBox(
-                            child: Center(
-                              child: Text(snapshot.error.toString()),
-                            ),
-                          );
-                        }
-                        if (snapshot.hasData) {
-                          return TodoCard(todo: snapshot.data as Todo);
-                        } else {
-                          return const SizedBox();
-                        }
-                      });
-                });
-          } else {
-            return const SizedBox();
-          }
-        }),
-      
-      
-      // Completed
-      StreamBuilder(stream: todosComplete, builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return FutureBuilder(
-                      future: snapshot.data![index],
-                      builder: (context, snapshot) {
-                        if(snapshot.hasError) {
-                          return  SizedBox(
-                            child: Center(
-                              child: Text(snapshot.error.toString()),
-                            ),
-                          );
-                        }
-                        if (snapshot.hasData) {
-                          return TodoCard(todo: snapshot.data as Todo);
-                        } else {
-                          return const SizedBox();
-                        }
-                      });
-                });
-          } else {
-            return const SizedBox();
-          }
-        }),
-        ],
-      ))]));
+        children: [todosIncomplete, todosComplete].map((todos) => StreamBuilder(
+              stream: todos,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return todoListWidget(snapshot);
+                } else {
+                  return const SizedBox();
+                }
+              },
+        )).toList()
+        
+      ),
+    ),
+         ],
+       )]));
         
     
+  }
+
+  Widget todoListWidget(snapshot){
+    return ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return FutureBuilder(
+                    future: snapshot.data![index],
+                    builder: (context, snapshot) {
+                      if(snapshot.hasError) {
+                        return  SizedBox(
+                          child: Center(
+                            child: Text(snapshot.error.toString()),
+                          ),
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        return TodoCard(todo: snapshot.data as Todo);
+                      } else {
+                        return const SizedBox();
+                      }
+                    });
+              });
   }
 
   Widget titleWidget() {
@@ -205,18 +188,17 @@ class TodoCard extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-          horizontal: 20, vertical: 10),
+          horizontal: 20, vertical: 0),
       child: Container(
+        
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  blurRadius: 5,
-                  spreadRadius: 2)
-            ]),
+            ),
         child: ListTile(
+          tileColor: Colors.white,
+          // no border
+          
           leading: Checkbox(
             value: todo.isDone,
             onChanged: (value) {

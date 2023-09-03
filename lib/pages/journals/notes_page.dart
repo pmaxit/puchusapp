@@ -196,7 +196,7 @@ class JournalEntry extends StatelessWidget {
                   SizedBox(
                       width: 100,
                       child: Text(
-                        journal.date,
+                        journal.getDateinMMDDFormat(),
                         overflow: TextOverflow.ellipsis,
                       )),
                   Text(journal.timeAgo)

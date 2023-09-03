@@ -44,6 +44,10 @@ class FirestoreDatabase{
     path: FirestorePath.todo(documentId),
   );
 
+  Future<void> deletePost(String documentId) async => await _firestoreService.deleteData(
+    path: FirestorePath.post(documentId),
+  );
+
   Future<void> addStory(Story story) async => await _firestoreService.set(
     path: FirestorePath.story(story.documentId?? const Uuid().v4()),
     data: story.toMap(),
@@ -63,6 +67,7 @@ class FirestoreDatabase{
   // postsStream
   Stream<List<Future<Post>>> postsStream() => _firestoreService.collectionStream(
     path: FirestorePath.posts(),
+    queryBuilder: (query) => query.orderBy("createdAt", descending: true),
     builder: (data, documentId) => Post.fromMap(data, documentId),
   );
 
@@ -85,9 +90,16 @@ class FirestoreDatabase{
 
   Stream<List<Future<Journal>>> noteStream() => _firestoreService.collectionStream(
     path: FirestorePath.notes(),
-    queryBuilder: (query) => query.orderBy("date", descending: true),
+    queryBuilder: (query) => query.where("space", isEqualTo:"private").orderBy("pinned", descending:true).orderBy('position', descending:false).orderBy("createdAt", descending: true),
     builder: (data, documentId) => Journal.fromMap(data, documentId),
   );
+
+    Stream<List<Future<Journal>>> notePublicStream() => _firestoreService.collectionStream(
+    path: FirestorePath.notes(),
+    queryBuilder: (query) => query.where("space", isEqualTo: "public"),
+    builder: (data, documentId) => Journal.fromMap(data, documentId),
+  );
+
 
   // Stream to get todos
     Stream<List<Future<Todo>>> todoStreamIncomplete() => _firestoreService.collectionStream(
