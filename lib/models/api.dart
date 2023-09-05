@@ -87,6 +87,7 @@ final allSongsList = FutureProvider<List<Song>>((ref) async {
   final firebaseDB = ref.watch(firebaseDBProvider);
   final stream = firebaseDB.songsStream();
 
+  
   final List<Song> songsList = [];
   stream.map((events) async {
       for(var event in events){

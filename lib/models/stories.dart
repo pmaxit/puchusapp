@@ -15,7 +15,7 @@ class Story{
 
   // fromMap
   factory Story.fromMap(Map<String, dynamic> data, String documentId){
-    final user = UserModel.fromMap(data['user']);
+    final user = UserModel.fromMap(data['user'], data['user']['uid']);
     final imageUrl = data['imageUrl'] as String;
     final isViewed = data['isViewed'] as bool;
 

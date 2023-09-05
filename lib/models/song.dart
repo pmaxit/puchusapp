@@ -57,7 +57,7 @@ class Song {
 
   factory Song.fromMap(Map<String, dynamic> json, String documentId) {
     return Song(
-        user: UserModel.fromMap(json['user']),
+        user: UserModel.fromMap(json['user'], json['user']['uid']),
         tab: json['tab'],
         songId: json['id'],
         title: json['title'],

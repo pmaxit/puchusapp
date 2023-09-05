@@ -15,6 +15,7 @@ class AppState {
   final bool isPlaying;
   final Song? currentSong;
   final Song? previousSong;
+  final UserModel? currentUser;
 
   int rewiredPercentage;
   int victoryDays;
@@ -32,6 +33,7 @@ class AppState {
       this.currentSong,
       required this.isPlaying,
       this.previousSong,
+      this.currentUser,
       this.rewiredPercentage = 0,
       this.victoryDays = 0,
       this.currentGoal = 1,
@@ -41,7 +43,8 @@ class AppState {
       this.stories = const [],
       this.posts = const [],
       this.journals = const [],
-      this.resetSong = false});
+      this.resetSong = false,
+      });
 
   factory AppState.initial() {
     // create new app state
@@ -70,6 +73,7 @@ class AppState {
       DateTime? startDate,
       int? currentGoal,
       int? finalGoal,
+      UserModel? currentUser,
       bool? resetSong}) {
     return AppState(
         songs: songs ?? this.songs,
@@ -81,7 +85,8 @@ class AppState {
         startDate: startDate ?? this.startDate,
         currentGoal: currentGoal ?? this.currentGoal,
         finalGoal: finalGoal ?? this.finalGoal,
-        resetSong: resetSong ?? this.resetSong);
+        resetSong: resetSong ?? this.resetSong,
+        currentUser: currentUser ?? this.currentUser,);
   }
 
       // toJson
@@ -118,6 +123,10 @@ class AppStateNotifier extends StateNotifier<AppState> {
         }
       };
     }
+
+  void updateCurrentUser(UserModel user){
+    state = state.copyWith(currentUser: user);
+  }
 
   void calculateVictoryDays() {
     // difference between current date and start date
@@ -216,6 +225,7 @@ class AppStateNotifier extends StateNotifier<AppState> {
   List<Story> get stories => state.stories;
   List<Post> get posts => state.posts;
   List<Journal> get journals => state.journals;
+  UserModel? get currentUser => state.currentUser;
 }
 
 
@@ -225,6 +235,7 @@ final appStateProvider =
     StateNotifierProvider<AppStateNotifier, AppState>((ref) {
   final songs = ref.watch(allSongsList);
   final currentState = ref.read(currentStateProvider);
+  final currentUser = ref.read(currentUserFutureProvider);
 
   // get user data 
   // get all the songs
@@ -246,6 +257,11 @@ final appStateProvider =
     if (currentState.isNotEmpty) {
           appStateNotifier.updateState(currentState);
   }
+  });
+
+  // get current user
+  currentUser.whenData((user) {
+    appStateNotifier.updateCurrentUser(user);
   });
 
   return appStateNotifier;
@@ -270,4 +286,14 @@ final currentStateProvider = StreamProvider<Map<String,dynamic>>((ref) {
 
   return firebaseDB.getCurrentState();
 });
+
+final currentUserFutureProvider = FutureProvider<UserModel>((ref) async {
+  final firebaseDB = ref.watch(firebaseDBProvider);
+  return firebaseDB.getCurrentUser();
+});
+
+
+final currentUserProvider = Provider<UserModel>((ref){ 
+  return ref.watch(appStateProvider).currentUser!;
+  });
 

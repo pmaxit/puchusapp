@@ -49,6 +49,13 @@ dependencies:
   uuid: ^3.0.7
   intl: ^0.17.0
   autoscale_tabbarview: ^1.0.2
+  flutter_animate: ^4.2.0+1
+  flutter_sound_lite: ^8.5.0
+  record: ^4.4.4
+  audioplayers: ^5.1.0
+  firebase_storage: ^11.2.6
+  path_provider: ^2.1.1
+  permission_handler: ^10.4.3
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +82,7 @@ flutter:
   assets:
     - assets/images/
     - assets/notes/
+    - assets/audios/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

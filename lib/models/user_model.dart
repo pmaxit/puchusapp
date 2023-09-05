@@ -7,6 +7,7 @@ class UserModel {
   String? phoneNumber;
   String? photoUrl;
   String? imageUrl;
+  String? documentId;
 
   UserModel(
       {required this.uid,
@@ -14,10 +15,11 @@ class UserModel {
       this.name,
       this.phoneNumber,
       this.photoUrl,
-      this.imageUrl});
+      this.imageUrl,
+      this.documentId});
 
   // FromMap
-  factory UserModel.fromMap(Map<String, dynamic> data) {
+  factory UserModel.fromMap(Map<String, dynamic> data, String documentId) {
     final uid = data['uid'];
     final email = data['email'];
     final name = data['name'];
@@ -31,7 +33,8 @@ class UserModel {
         name: name,
         phoneNumber: phoneNumber,
         photoUrl: photoUrl,
-        imageUrl: imageUrl);
+        imageUrl: imageUrl,
+        documentId: documentId);
   }
 
   // toMap
@@ -50,6 +53,10 @@ class UserModel {
   static String generateImageUrl() {
     final uuid = Uuid();
     return 'https://picsum.photos/id/${uuid.v4()}/200/200';
+  }
+
+  String toString(){
+    return "UserModel(uid: $uid, email: $email, name: $name, phoneNumber: $phoneNumber, photoUrl: $photoUrl, imageUrl: $imageUrl)";
   }
 
 }

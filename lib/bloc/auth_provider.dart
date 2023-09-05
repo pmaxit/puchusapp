@@ -111,16 +111,3 @@ final authProvider = ChangeNotifierProvider<AuthProvider>((ref) => AuthProvider(
 final firebaseDBProvider = Provider<FirestoreDatabase>((ref) => FirestoreDatabase(uid: ref.watch(authProvider).currentUser!.uid));
 
 
-final currentUserProvider = Provider<UserModel>((ref){ 
-  
-  
-  final user = ref.watch(authProvider).currentUser!;
-  final newUser = UserModel(uid: user.uid, 
-        email: user.email,
-        name: user.displayName,
-        phoneNumber: user.phoneNumber,
-        imageUrl: user.photoURL
-      );
-
-    return newUser;
-  });

@@ -44,7 +44,7 @@ class Post{
 
   // from Map
   factory Post.fromMap(Map<String, dynamic> data, String documentId){
-    final user = UserModel.fromMap(data['user']);
+    final user = UserModel.fromMap(data['user'], data['user']['uid']);
     final caption = data['caption'];
     final imageUrl = data['imageUrl'];
     final likes = data['likes'] as int;
@@ -143,7 +143,7 @@ class Journal{
     
 
     return Journal(
-      user: UserModel.fromMap(data['user']),
+      user: UserModel.fromMap(data['user'], data['user']['uid']),
       date: date,
       title: title,
       content: content,

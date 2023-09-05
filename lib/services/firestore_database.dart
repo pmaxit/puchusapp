@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:oneui/models/models.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,6 +12,21 @@ class FirestoreDatabase{
   final String uid;
 
   final _firestoreService = FirestoreService.instance;
+  
+
+  // get document
+  Future<UserModel> getCurrentUser() async {
+    final userStream = _firestoreService.documentStream(path: FirestorePath.user(uid), builder: (data, documentId) => UserModel.fromMap(data, documentId));
+    return await userStream.first;
+  }
+
+  Future<UploadTask> uploadData({
+    String refPath='songs',
+    required String path
+  }){
+    
+    return _firestoreService.uploadData(refPath: refPath, path: path);
+  }
 
   // Method to create / update notes
 

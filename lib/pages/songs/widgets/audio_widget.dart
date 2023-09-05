@@ -38,9 +38,12 @@ class AudioWidget extends HookConsumerWidget {
     final reset = ref.watch(appStateProvider).resetSong;
     
     
+    print('current song is $song');
     final sliderValue = useState(0.0);
     final durationValue = useState<double>(0.0);
+
     final audioPlayer = useMemoized(() {
+      print("audio player created");
       final player = AudioPlayer();
 
       player.setLoopMode(LoopMode.one);
@@ -72,7 +75,7 @@ class AudioWidget extends HookConsumerWidget {
 
       final durationSubscription =
           audioPlayer.durationStream.listen((duration) {
-        durationValue.value = duration!.inSeconds.toDouble();
+        durationValue.value = duration?.inSeconds.toDouble()?? 0.0;
       });
 
       // listen to audio player state changes
@@ -85,6 +88,7 @@ class AudioWidget extends HookConsumerWidget {
       });
 
       return () {
+        print("cancelling subscription");
         subscription?.cancel();
         durationSubscription.cancel();
         playerStateSubscription.cancel();
@@ -104,7 +108,7 @@ class AudioWidget extends HookConsumerWidget {
     // reset audio
     useEffect(() {
       if (reset!) {
-        audioPlayer.seek(Duration.zero);
+        //audioPlayer.seek(Duration.zero);
         ref.read(appStateProvider).resetSong = false;
       }
       return null;

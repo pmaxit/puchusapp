@@ -1,7 +1,14 @@
+import 'dart:io';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/post_model.dart';
+
 
 class FirestoreService {
   FirestoreService._();
@@ -9,6 +16,8 @@ class FirestoreService {
   static final instance = FirestoreService._();
 
   Future<String> get uid => Future.value(const Uuid().v4());
+
+
 
   Future<void> set({
     required String path,
@@ -19,6 +28,22 @@ class FirestoreService {
     print('$path: $data');
     await reference.set(data, SetOptions(merge: merge));
   }
+
+  Future<UploadTask> uploadData(
+    {
+    String refPath='songs',
+    required String path
+    }
+  ) async {
+    final reference = FirebaseStorage.instance.ref().child(refPath);
+    
+    //final Directory systemTempDir = Directory.systemTemp;
+    final file = File(path);
+    final uploadTask = reference.putFile(file, SettableMetadata(contentType: 'audio/mpeg'));
+    return uploadTask;
+  }
+
+
 
   Future<void> bulkSet({
     required String path,
@@ -65,6 +90,7 @@ class FirestoreService {
             final userData = value.data() as Map<String, dynamic>;
             // merge user data with post data
             data['user'] = userData;
+            data['user']['uid'] = userId;
             return builder(data, snapshot.id);
           });
         }
